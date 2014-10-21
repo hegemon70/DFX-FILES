@@ -165,12 +165,12 @@ def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color
 #pre: espejo valor 0,1,2
 #post: espejo=0 sin mirror, espejo=1 con mirror en X, espejo=2 con mirror en Y
 #		anguloIni, anguloFin son angulos como el reloj desde las 12
-	print ("este es el angulo inicial:",anguloIni)
-	print ("este es el angulo final:",anguloFin)
+'''	print ("este es el angulo inicial:",anguloIni)
+	print ("este es el angulo final:",anguloFin)'''
 	anIni = traduceElAnguloRelojATrigonometria(anguloIni)
 	anFin = traduceElAnguloRelojATrigonometria(anguloFin)
-	print ("este es el angulo calculo inicial:",anIni)
-	print ("este es el angulo calculo final:",anFin)
+'''	print ("este es el angulo calculo inicial:",anIni)
+	print ("este es el angulo calculo final:",anFin)'''
 	rot = dameGradosRotacionTexto(anIni,anFin)
 	print ("EL ANGULO DE ROTACION DEL TEXTO ES :",rot)
 	pX,pY=posicionaTexto(anguloIni,anguloFin,xCenter,yCenter,radio)#importante el angulo es de reloj
