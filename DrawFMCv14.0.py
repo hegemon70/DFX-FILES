@@ -172,13 +172,14 @@ def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color
 '''	print ("este es el angulo calculo inicial:",anIni)
 	print ("este es el angulo calculo final:",anFin)'''
 	rot = dameGradosRotacionTexto(anIni,anFin)
-	print ("EL ANGULO DE ROTACION DEL TEXTO ES :",rot)
+#	print ("EL ANGULO DE ROTACION DEL TEXTO ES :",rot)
 	pX,pY=posicionaTexto(anguloIni,anguloFin,xCenter,yCenter,radio)#importante el angulo es de reloj
 	text = dxf.mtext(texto,(pX,pY))
 	text.layer = capa
 	text.color = color
 	text.height = tamFte
 	text.rotation = rot
+	text.valign = dxfwrite.CENTER
 	text.halign = dxfwrite.CENTER
 	if (espejo != 0):
 		if (espejo == 1):
