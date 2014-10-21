@@ -144,10 +144,29 @@ def damePtoArcoReloj(xCenter,yCenter,ang,radio):
 	# draw.save()
 
 def dameGradosRotacionTexto(anguloIni,anguloFin):
+	cuadIni=dameCuadrante(anguloIni)
+	cuadFin=dameCuadrante(anguloFin)
+	print ("el angulo de la bisectriz es ",(anguloIni+anguloFin)/2)
 	angDef=((anguloIni+anguloFin)/2)+270.0
+	if (cuadIni==1):
+		if(cuadFin==4):#implica un angulo especial hay que decidir si es mas o menos que 0 grados
+			print("caso especial ini cuadrante1, fin cuadrante4")
+			angAux= 360.0 - anguloFin#con esto averiguo el angulo real a sumar
+			print("angulo por debajo del eje x:",angAux)
+			if (angAux==anguloIni):#si son iguales el angulo resultante es 0
+				angDef=0.0
+			else:#hay que calcular la bisectriz
+				angAux = (angAux + anguloIni)/2#con esto sacamos la bisectriz de los dos angulos
+				print("la bisectrix es:",angAux)
+				if(angAux > anguloIni):#es un angulo negativo por debajo de 0
+					angAux = angAux - anguloIni#esto es lo que sobra y hay que traducir a su opuesto
+					angAux = 360.0 - angAux
+					print("es el peor de los casos el angulo de la bisectrix es:",angAux)
+				angDef=angAux+270.0
 	if(angDef > 360.0):
 		print ("resultado es un angulo mayor de 360")
 		angDef = angDef - 360.0
+	print ("el angulo de rotacion es:",angDef)
 	return angDef
 
 def posicionaTexto(angIni,angFin,xCenter,yCenter,radio):
@@ -165,12 +184,12 @@ def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color
 #pre: espejo valor 0,1,2
 #post: espejo=0 sin mirror, espejo=1 con mirror en X, espejo=2 con mirror en Y
 #		anguloIni, anguloFin son angulos como el reloj desde las 12
-'''	print ("este es el angulo inicial:",anguloIni)
-	print ("este es el angulo final:",anguloFin)'''
+	print ("este es el angulo inicial:",anguloIni)
+	print ("este es el angulo final:",anguloFin)
 	anIni = traduceElAnguloRelojATrigonometria(anguloIni)
 	anFin = traduceElAnguloRelojATrigonometria(anguloFin)
-'''	print ("este es el angulo calculo inicial:",anIni)
-	print ("este es el angulo calculo final:",anFin)'''
+	print ("este es el angulo calculo inicial:",anIni)
+	print ("este es el angulo calculo final:",anFin)
 	rot = dameGradosRotacionTexto(anIni,anFin)
 #	print ("EL ANGULO DE ROTACION DEL TEXTO ES :",rot)
 	pX,pY=posicionaTexto(anguloIni,anguloFin,xCenter,yCenter,radio)#importante el angulo es de reloj
@@ -179,7 +198,7 @@ def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color
 	text.color = color
 	text.height = tamFte
 	text.rotation = rot
-	text.valign = dxfwrite.CENTER
+	text.valign = dxfwrite.MIDDLE
 	text.halign = dxfwrite.CENTER
 	if (espejo != 0):
 		if (espejo == 1):
@@ -188,6 +207,7 @@ def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color
 			text.mirror = dxfwrite.MIRROR_Y
 	draw.add(text)
 	draw.save()
+	print("escrito:",texto)
 
 def dibujaArcoRelojColoreadoCapa(draw,centroX,centroY,base,anguloIni,anguloFin,colorLine2,capa): 
 	angI=traduceElAnguloRelojATrigonometria(anguloIni)
@@ -374,7 +394,7 @@ def main():
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,30.0,60.0,base,altura,colorLine2,'sector1')
 	escribeEnArcoCapa(drawing,'en',centroX,centroY,30.0,60.0,altura-primeraLinea,colorLine,3.0,'letrasSector1',0)
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,60.0,100.0,base,altura1,colorLine3,'sector2')
-	escribeEnArcoCapa(drawing,'un',centroX,centroY,60.0,100.0,altura1-primeraLinea,colorLine,3.0,'letrasSector2',0)
+	escribeEnArcoCapa(drawing,'cabron',centroX,centroY,60.0,100.0,altura1-primeraLinea,colorLine,3.0,'letrasSector2',0)
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,100.0,180.0,base,altura2,colorLine4,'sector3')
 	escribeEnArcoCapa(drawing,'lugar',centroX,centroY,100.0,180.0,altura2-primeraLinea,colorLine,3.0,'letrasSector3',0)
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,180.0,210.0,base,65,colorLine5,'sector4')
