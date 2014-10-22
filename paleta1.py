@@ -12,6 +12,66 @@ from dxfwrite import DXFEngine as dxf
 from dxfwrite.const import CENTER, RIGHT, ALIGNED, FIT, BASELINE_MIDDLE
 from dxfwrite.const import TOP, MIDDLE, BOTTOM
 
+def posicionaTexto(angIni,angFin,xCenter,yCenter,radio):
+	ang =(angIni+angFin)/2
+	x,y = damePtoArcoReloj(xCenter,yCenter,ang,radio)
+	return x,y
+
+def dameGradosRotacionTexto(anguloIni,anguloFin):
+	cuadIni=dameCuadrante(anguloIni)
+	cuadFin=dameCuadrante(anguloFin)
+	print ("el angulo de la bisectriz es ",(anguloIni+anguloFin)/2)
+	angDef=((anguloIni+anguloFin)/2)+270.0
+	if (cuadIni==1):
+		if(cuadFin==4):#implica un angulo especial hay que decidir si es mas o menos que 0 grados
+			print("caso especial ini cuadrante1, fin cuadrante4")
+			angAux= 360.0 - anguloFin#con esto averiguo el angulo real a sumar
+			print("angulo por debajo del eje x:",angAux)
+			if (angAux==anguloIni):#si son iguales el angulo resultante es 0
+				angDef=0.0
+			else:#hay que calcular la bisectriz
+				angAux = (angAux + anguloIni)/2#con esto sacamos la bisectriz de los dos angulos
+				print("la bisectrix es:",angAux)
+				if(angAux > anguloIni):#es un angulo negativo por debajo de 0
+					angAux = angAux - anguloIni#esto es lo que sobra y hay que traducir a su opuesto
+					angAux = 360.0 - angAux
+					print("es el peor de los casos el angulo de la bisectrix es:",angAux)
+				angDef=angAux+270.0
+	if(angDef > 360.0):
+		print ("resultado es un angulo mayor de 360")
+		angDef = angDef - 360.0
+	print ("el angulo de rotacion es:",angDef)
+	return angDef
+
+def escribeEnArcoCapa(draw,texto,xCenter,yCenter,anguloIni,anguloFin,radio,color,tamFte,capa,espejo=0):
+#pre: espejo valor 0,1,2
+#post: espejo=0 sin mirror, espejo=1 con mirror en X, espejo=2 con mirror en Y
+#		anguloIni, anguloFin son angulos como el reloj desde las 12
+	'''print ("este es el angulo inicial:",anguloIni)
+	print ("este es el angulo final:",anguloFin)'''
+	anIni = traduceElAnguloRelojATrigonometria(anguloIni)
+	anFin = traduceElAnguloRelojATrigonometria(anguloFin)
+	'''print ("este es el angulo calculo inicial:",anIni)
+	print ("este es el angulo calculo final:",anFin)'''
+	rot = dameGradosRotacionTexto(anIni,anFin)
+#	print ("EL ANGULO DE ROTACION DEL TEXTO ES :",rot)
+	pX,pY=posicionaTexto(anguloIni,anguloFin,xCenter,yCenter,radio)#importante el angulo es de reloj
+	text = dxf.mtext(texto,(pX,pY))
+	text.layer = capa
+	text.color = color
+	text.height = tamFte
+	text.rotation = rot
+	text.valign = dxfwrite.MIDDLE
+	text.halign = dxfwrite.CENTER
+	if (espejo != 0):
+		if (espejo == 1):
+			text.mirror = dxfwrite.MIRROR_X
+		else:
+			text.mirror = dxfwrite.MIRROR_Y
+	draw.add(text)
+	draw.save()
+	print("escrito:",texto)
+
 def dameCuadrante(ang):
 	numCuadrante=1
 	if ang <= 90:
@@ -157,9 +217,12 @@ def drawLineColouredLayer(draw, pxOrig, pyOrig, pxDstn, pyDstn, colorL,capa):
 def main():
 	centroX = 1.0
 	centroY = 10.0
-	drawing = dxf.drawing('paleta.dxf')
+	drawing = dxf.drawing('paleta1.dxf')
 	for i in range(256):
 		creaTroncoConoSolidoCapa(drawing,centroX,centroY,80.0,90.0,20,25,i,'paleta')
-		centroY = centroY + 2.0
+		escribeEnArcoCapa(drawing,str(i),centroX,centroY,80.0,90.0,20,1,3.0,'letras',0)
+		centroY = centroY + 10.0
+		if (i%25==0): #cada 25 
+			centroX = centroX + 20 #salta a la derecha
 		print ('imprimiendo:',i)
 if __name__ == '__main__' : main()

@@ -335,7 +335,7 @@ def drawCircle(draw, cx, cy ,radius):
 	return cx,cy
 
 
-def creaTroncoConoCapa(drawing,anguloIni,anguloFin,base,altura,colorLine3,capa):
+def creaTroncoConoCapa(drawing,centroX,centroY,anguloIni,anguloFin,base,altura,colorLine3,capa):
 #prev: drawing un dxf.drawing valido
 #post: dibuja un tronco cono y devuelve sus puntos extremos
 #		px0,py0 es el punto inferior del angulo inicial
@@ -353,7 +353,7 @@ def creaTroncoConoCapa(drawing,anguloIni,anguloFin,base,altura,colorLine3,capa):
 	drawing.save()
 	return px0,py0,pxd,pyd,px0a,py0a,pxda,pyda
 
-def creaTroncoCono(drawing,anguloIni,anguloFin,base,altura,colorLine3):
+def creaTroncoCono(drawing,centroX,centroY,anguloIni,anguloFin,base,altura,colorLine3):
 	dibujaArcoRelojColoreado(drawing,centroX,centroY,base,anguloIni,anguloFin,colorLine3)
 	dibujaArcoRelojColoreado(drawing,centroX,centroY,altura,anguloIni,anguloFin,colorLine3)
 	px0,py0 = damePtoArcoReloj(centroX,centroY,anguloIni,base)
@@ -365,8 +365,8 @@ def creaTroncoCono(drawing,anguloIni,anguloFin,base,altura,colorLine3):
 	drawing.save()
 	return px0,py0,pxd,pyd,px0a,py0a,pxda,pyda
 
-def creaTroncoConoSolidoCapa(drawing,anguloIni,anguloFin,base,altura,colorLine3,capa):
-	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoCapa(drawing,anguloIni,anguloFin,base,altura,colorLine3,capa)
+def creaTroncoConoSolidoCapa(drawing,centroX,centroY,anguloIni,anguloFin,base,altura,colorLine3,capa):
+	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoCapa(drawing,centroX,centroY,anguloIni,anguloFin,base,altura,colorLine3,capa)
 	for i in range(base, altura):
 		dibujaArcoRelojColoreadoCapa(drawing,centroX,centroY,i,anguloIni,anguloFin,colorLine3,capa)
 		k=0
@@ -402,7 +402,7 @@ def main():
 		print ('texto:',i[3])
 		print ('color:',i[4])
 		print ('capa:',i[5])
-		px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,i[1],i[2],base,i[0],i[4],i[5])
+		px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,centroX,centroY,i[1],i[2],base,i[0],i[4],i[5])
 		escribeEnArcoCapa(drawing,i[3],centroX,centroY,i[1],i[2],i[0]-primeraLinea,colorLine,3.0,'letras'+ i[5],0)
 		testeaAlineacionLetras(drawing,i[1],i[2],centroX,centroY,altura * 2,colorLine,'Guias')
 	#px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,30.0,60.0,base,altura,colorLine2,'sector1')
