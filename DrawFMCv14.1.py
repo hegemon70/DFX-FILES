@@ -377,20 +377,30 @@ def creaTroncoConoSolidoCapa(drawing,anguloIni,anguloFin,base,altura,colorLine3,
 	return px0,py0,pxd,pyd,px0a,py0a,pxda,pyda
 
 def main():
-	anguloIni=30
-	anguloFin=60
+	texto='en'
+	capa='sector1'
+	anguloIni=30.0
+	anguloFin=60.0
 	base=40
 	altura=80
-	anguloIni1=60
-	anguloFin1=100
+	anguloIni1=60.0
+	anguloFin1=100.0
 	altura1=60
 	altura2=70
 	primeraLinea=5
 	segundaLinea=10
 	drawing = dxf.drawing('curriculo.dxf')
+	refRosco=[(altura,anguloIni,angulofin,texto,colorLine2,capa),(60,60.0,100.0,'un',3,'sector2'),(70,100.0,180.0,'lugar',4,'sector3'),(65,180.0,210.0,'de',5,'sector4'),(50,210.0,270.0,'la',6,'sector5'),(75,270.0,360.0,'mancha',7,'sector6')]
 #set value
 #	drawing.header['$ANGBASE'] = 90
 #	drawing.header['$ANGDIR'] = 1
+	for i in refRosco:
+		print ('altura:',i[0])
+		print ('anguloIni:',i[1])
+		print ('anguloFin:',i[2])
+		print ('texto:',i[3])
+		print ('color:',i[4])
+		print ('capa:',i[5])
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,30.0,60.0,base,altura,colorLine2,'sector1')
 	escribeEnArcoCapa(drawing,'en',centroX,centroY,30.0,60.0,altura-primeraLinea,colorLine,3.0,'letrasSector1',0)
 	px0,py0,pxd,pyd,px0a,py0a,pxda,pyda=creaTroncoConoSolidoCapa(drawing,60.0,100.0,base,altura1,colorLine3,'sector2')
